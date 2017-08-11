@@ -21,7 +21,7 @@
 	},
 	"redis": {
 		"host": "ec2-52-202-15-207.compute-1.amazonaws.com",
-		"port": 42869,
+		"port": "42869",
 		"password": "p7e642bd42fb3a42064d893b241b1ad08ead72b7c11f9725a82120bae55409a5b"
 	}
 }

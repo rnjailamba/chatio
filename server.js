@@ -38,8 +38,8 @@ app.use(function(req, res, next) {
   res.status(404).sendFile(process.cwd() + '/app/views/404.htm');
 });
 
-app.listen(process.env.PORT || 3000, function(){
-  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
-});
+// app.listen(process.env.PORT || 3000, function(){
+//   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+// });
 
 ioServer.listen(port);

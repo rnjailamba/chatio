@@ -7,6 +7,21 @@ var passport 	= require('passport');
 var User = require('../models/user');
 var Room = require('../models/room');
 var Message = require('../models/message');
+var scapegoat = require("message_client_on_socketio");
+var escape = scapegoat.escape;
+var unescape = scapegoat.unescape;
+var callbackFn = scapegoat.callbackFn;
+
+var html = '<h1>Hello World</h1>';
+var escaped = escape(html);
+var unescaped = unescape(escaped);
+var bla = callbackFn(function () {
+	var a = 1;
+
+})
+
+console.log('html', html, 'escaped', escaped, 'unescaped', unescaped);
+
 
 // Home page
 router.get('/', function(req, res, next) {

@@ -1,3 +1,10 @@
+Set up webstorm for express - https://www.youtube.com/watch?v=wvzZQ05BMmQ
+
+Set up mongo https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/#install-mongodb-community-edition
+
+Run remote mongo mongo ds133192.mlab.com:33192/heroku_r52pl7qk -u heroku_r52pl7qk -p tql0268s9spvoii7f79s26mfq4
+
+
 ![Screenshot](https://raw.githubusercontent.com/OmarElGabry/chat.io/master/public/img/chat.io.gif)
 
 # chat.io

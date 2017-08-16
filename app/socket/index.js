@@ -5,6 +5,7 @@ var redis 	= require('redis').createClient;
 var adapter = require('socket.io-redis');
 
 var Room = require('../models/room');
+var Message = require('../models/message');
 
 /**
  * Encapsulates all code for emitting and listening to socket events
@@ -103,10 +104,19 @@ var ioEvents = function(io) {
 			// No need to emit 'addMessage' to the current socket
 			// As the new message will be added manually in 'main.js' file
 			// socket.emit('addMessage', message);
-			
-			socket.broadcast.to(roomId).emit('addMessage', message);
-		});
+            Room.findById(roomId, function(err, room){
+                if(err) throw err;
+                if(!room){
 
+                } else {
+                    Message.createMessage(room, socket, message, function (err, newMessage) {
+                        socket.broadcast.to(roomId).emit('addMessage', message);
+                        // socket.emit('updateRoomsList', newMessage);
+                        // socket.broadcast.emit('updateRoomsList', newMessage);
+                    });
+                }
+            });
+		});
 	});
 }
 

@@ -19,11 +19,17 @@
           <i class="fa fa-users"></i>
         </div> <!-- end chat-header -->
 
-        <div class="room-list">
+        <div class="chat-history1">
           <ul>
               <% if(messages.length > 0) { %>
               <% messages.forEach(function(message) { %>
-                <li class="room-item"><%= message.message + " - " + message.username %></li></a>
+                <li>
+                  <div class="message-data">
+                    <span class="message-data-name"><%= message.username %></span>
+                    <span class="message-data-time"><%= message.date %></span>
+                  </div>
+                  <div class="message my-message" dir="auto"><%= message.message %></div>
+                </li>
               <% }); %>
               <% } else { %>
                 <p class="message" style="text-align: center; padding: 0; margin: 0;">Create your first message!</p>

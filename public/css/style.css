@@ -127,6 +127,45 @@ body {
 .chat .chat-history .my-message {
   background: #86BB71;
 }
+.chat .chat-history1, .room .room-list {
+  padding: 10px 30px 20px;
+  border-bottom: 2px solid white;
+  overflow-y: scroll;
+  max-height: 580px;
+}
+.chat .chat-history1 .message-data {
+  margin-bottom: 15px;
+}
+.chat .chat-history1 .message-data-time {
+  color: #a8aab1;
+  padding-left: 6px;
+  font-size: 80%;
+}
+.chat .chat-history1 .message {
+  color: white;
+  padding: 18px 20px;
+  line-height: 26px;
+  font-size: 16px;
+  margin-bottom: 30px;
+  /*width: 90%;*/
+  position: relative;
+}
+.chat .chat-history1 .message:after {
+  bottom: 100%;
+  left: 7%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-bottom-color: #86BB71;
+  border-width: 10px;
+  margin-left: -10px;
+}
+.chat .chat-history1 .my-message {
+  background: #86BB71;
+}
 .chat .chat-message, .room .room-create {
   padding: 20px;
 }
@@ -245,6 +284,20 @@ ul {
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
+}
+.chat .chat-history .my-message {
+  text-align: initial;
+}
+.chat-history1 ul {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+.chat .chat-history1 .my-message {
+  text-align: initial;
 }
 .room .room-list .room-item {
   color: white;

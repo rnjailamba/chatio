@@ -4,6 +4,15 @@ Set up mongo https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/#i
 
 Run remote mongo mongo ds133192.mlab.com:33192/heroku_r52pl7qk -u heroku_r52pl7qk -p tql0268s9spvoii7f79s26mfq4
 
+Callback in plugin- https://futurestud.io/tutorials/callback-and-promise-support-in-your-node-js-modules
+
+Clone this - https://www.pubnub.com/docs/web-javascript/pubnub-javascript-sdk
+
+User browserify - https://webynote.com/main/community/572ca9c81c92f50a2db2fb20
+
+User socketio client on serverside - https://stackoverflow.com/questions/10703513/node-js-client-for-a-socket-io-server
+
+Plugin window implementation https://cordova.apache.org/docs/en/latest/guide/hybrid/plugins/#sample-javascript
 
 ![Screenshot](https://raw.githubusercontent.com/OmarElGabry/chat.io/master/public/img/chat.io.gif)
 

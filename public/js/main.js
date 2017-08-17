@@ -35,65 +35,55 @@ var app = {
   },
 
   chat: function(roomId, username){
-      // console.log(foo.foo(5));
-      // var socket = requestSocket('/chatroom', function () {
-      //   var a = 1;
-      // });
-      console.log(MessageServiceClient);
-      var roll = new MessageServiceClient( 500 );
-      console.log(roll);
-
-      roll.addStep( MessageServiceClient.chunk(500, 20) ); // Add a step of 500px with 20px padding
-      roll.addStep( MessageServiceClient.chunk(700, 20) );  // Add a step of 700px with 20px padding
-
-
-      var socket = io('/chatroom', { transports: ['websocket'] });
-
-      // When socket connects, join the current chatroom
+      var messageServiceClient = new MessageServiceClient({roomName: '/chatroom', publishKey: 44, subscribeKey: 88});
+      var socket = messageServiceClient.requestSocket();
       socket.on('connect', function () {
+          socket.emit('join', roomId);
 
-        socket.emit('join', roomId);
+          // Update users list upon emitting updateUsersList event
+          socket.on('updateUsersList', function(users, clear) {
 
-        // Update users list upon emitting updateUsersList event
-        socket.on('updateUsersList', function(users, clear) {
+              $('.container p.message').remove();
+              if(users.error != null){
+                  $('.container').html(`<p class="message error">${users.error}</p>`);
+              }else{
+                  app.helpers.updateUsersList(users, clear);
+              }
+          });
 
-          $('.container p.message').remove();
-          if(users.error != null){
-            $('.container').html(`<p class="message error">${users.error}</p>`);
-          }else{
-            app.helpers.updateUsersList(users, clear);
-          }
-        });
+          // Whenever the user hits the save button, emit newMessage event.
+          $(".chat-message button").on('click', function(e) {
 
-        // Whenever the user hits the save button, emit newMessage event.
-        $(".chat-message button").on('click', function(e) {
+              var textareaEle = $("textarea[name='message']");
+              var messageContent = textareaEle.val().trim();
+              if(messageContent !== '') {
+                  var message = {
+                      content: messageContent,
+                      username: username,
+                      date: Date.now()
+                  };
 
-          var textareaEle = $("textarea[name='message']");
-          var messageContent = textareaEle.val().trim();
-          if(messageContent !== '') {
-            var message = { 
-              content: messageContent, 
-              username: username,
-              date: Date.now()
-            };
+                  socket.emit('newMessage', roomId, message);
+                  textareaEle.val('');
+                  app.helpers.addMessage(message);
+              }
+          });
 
-            socket.emit('newMessage', roomId, message);
-            textareaEle.val('');
-            app.helpers.addMessage(message);
-          }
-        });
+          // Whenever a user leaves the current room, remove the user from users list
+          socket.on('removeUser', function(userId) {
+              $('li#user-' + userId).remove();
+              app.helpers.updateNumOfUsers();
+          });
 
-        // Whenever a user leaves the current room, remove the user from users list
-        socket.on('removeUser', function(userId) {
-          $('li#user-' + userId).remove();
-          app.helpers.updateNumOfUsers();
-        });
-
-        // Append a new message 
-        socket.on('addMessage', function(message) {
-          app.helpers.addMessage(message);
-        });
+          // Append a new message
+          socket.on('addMessage', function(message) {
+              app.helpers.addMessage(message);
+          });
       });
+
+          // var socket = io('/chatroom', { transports: ['websocket'] });
+          // When socket connects, join the current chatroom
+
   },
 
   helpers: {

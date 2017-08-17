@@ -39,12 +39,12 @@ var app = {
       // var socket = requestSocket('/chatroom', function () {
       //   var a = 1;
       // });
-
-      var roll = new Roll( 500 );
+      console.log(MessageServiceClient);
+      var roll = new MessageServiceClient( 500 );
       console.log(roll);
 
-      roll.addStep( Roll.chunk(500, 20) ); // Add a step of 500px with 20px padding
-      roll.addStep( Roll.chunk(700, 20) );  // Add a step of 700px with 20px padding
+      roll.addStep( MessageServiceClient.chunk(500, 20) ); // Add a step of 500px with 20px padding
+      roll.addStep( MessageServiceClient.chunk(700, 20) );  // Add a step of 700px with 20px padding
 
 
       var socket = io('/chatroom', { transports: ['websocket'] });

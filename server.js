@@ -19,6 +19,8 @@ var port = process.env.PORT || 3000;
 
 // View engine setup
 app.set('views', path.join(__dirname, 'app/views'));
+app.use('/message_client_on_socketio', express.static(__dirname + '/node_modules/message_client_on_socketio/dist'));
+
 app.set('view engine', 'ejs');
 
 // Middlewares

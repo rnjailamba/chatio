@@ -39,7 +39,8 @@ var ioEvents = function(io) {
 	io.of('/chatroom').on('connection', function(socket) {
 
 		// Join a chatroom
-		socket.on('join', function(roomId) {
+		socket.on('join', function(data) {
+			var roomId = data.roomId;
 			Room.findById(roomId, function(err, room){
 				if(err) throw err;
 				if(!room){
@@ -59,8 +60,7 @@ var ioEvents = function(io) {
 
 						Room.getUsers(newRoom, socket, function(err, users, cuntUserInRoom){
 							if(err) throw err;
-							
-							// Return list of all user connected to the room to the current user
+                            // Return list of all user connected to the room to the current user
 							socket.emit('updateUsersList', users, true);
 
 							// Return the current user to other connecting sockets in the room 
@@ -99,11 +99,9 @@ var ioEvents = function(io) {
 		});
 
 		// When a new message arrives
-		socket.on('newMessage', function(roomId, message) {
-
-			// No need to emit 'addMessage' to the current socket
-			// As the new message will be added manually in 'main.js' file
-			// socket.emit('addMessage', message);
+		socket.on('newMessage', function(data) {
+            var roomId = data.roomId;
+            var message = data.message;
             Room.findById(roomId, function(err, room){
                 if(err) throw err;
                 if(!room){
@@ -111,8 +109,6 @@ var ioEvents = function(io) {
                 } else {
                     Message.createMessage(room, socket, message, function (err, newMessage) {
                         socket.broadcast.to(roomId).emit('addMessage', message);
-                        // socket.emit('updateRoomsList', newMessage);
-                        // socket.broadcast.emit('updateRoomsList', newMessage);
                     });
                 }
             });

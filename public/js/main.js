@@ -36,54 +36,57 @@ var app = {
 
   chat: function(roomId, username){
       var messageServiceClient = new MessageServiceClient({roomName: '/chatroom', publishKey: 44, subscribeKey: 88});
-      var socket = messageServiceClient.requestSocket();
-      socket.on('connect', function () {
-          socket.emit('join', roomId);
+      var socket = messageServiceClient.createSocket();
 
-          // Update users list upon emitting updateUsersList event
-          socket.on('updateUsersList', function(users, clear) {
-
-              $('.container p.message').remove();
-              if(users.error != null){
-                  $('.container').html(`<p class="message error">${users.error}</p>`);
-              }else{
-                  app.helpers.updateUsersList(users, clear);
-              }
-          });
-
-          // Whenever the user hits the save button, emit newMessage event.
-          $(".chat-message button").on('click', function(e) {
-
-              var textareaEle = $("textarea[name='message']");
-              var messageContent = textareaEle.val().trim();
-              if(messageContent !== '') {
-                  var message = {
-                      content: messageContent,
-                      username: username,
-                      date: Date.now()
-                  };
-
-                  socket.emit('newMessage', roomId, message);
-                  textareaEle.val('');
-                  app.helpers.addMessage(message);
-              }
-          });
-
-          // Whenever a user leaves the current room, remove the user from users list
-          socket.on('removeUser', function(userId) {
-              $('li#user-' + userId).remove();
-              app.helpers.updateNumOfUsers();
-          });
-
-          // Append a new message
-          socket.on('addMessage', function(message) {
+      messageServiceClient.addTheListener({
+          addMessage: function (message) {
               app.helpers.addMessage(message);
-          });
+          }
       });
 
-          // var socket = io('/chatroom', { transports: ['websocket'] });
-          // When socket connects, join the current chatroom
+      messageServiceClient.addTheListener({
+          connect: function () {
+              var data = {};
+              data.roomId = roomId;
+              messageServiceClient.socketEmit('join', data);
+              // Whenever the user hits the save button, emit newMessage event
 
+              messageServiceClient.addTheListenerWithCallback('updateUsersList', function (users, clear) {
+                  $('.container p.message').remove();
+                  if(users.error != null){
+                      $('.container').html(`<p class="message error">${users.error}</p>`);
+                  }else{
+                      app.helpers.updateUsersList(users, clear);
+                  }
+              });
+
+              $(".chat-message button").on('click', function(e) {
+
+                  var textareaEle = $("textarea[name='message']");
+                  var messageContent = textareaEle.val().trim();
+                  if(messageContent !== '') {
+                      var message = {
+                          content: messageContent,
+                          username: username,
+                          date: Date.now()
+                      };
+                      var data = {};
+                      data.roomId = roomId;
+                      data.message = message;
+                      messageServiceClient.socketEmit('newMessage', data);
+                      textareaEle.val('');
+                      app.helpers.addMessage(message);
+                  }
+              });
+
+              // Whenever a user leaves the current room, remove the user from users list
+              messageServiceClient.addTheListenerWithCallback('removeUser', function (userId) {
+                  $('li#user-' + userId).remove();
+                  app.helpers.updateNumOfUsers();
+              });
+
+          }
+      });
   },
 
   helpers: {
